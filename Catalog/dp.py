@@ -8,6 +8,6 @@ def get_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",  # change this if your MySQL has a password
+        password="Temple.Run2",  # change this if your MySQL has a password
         database="fresh_footwear",
     )
