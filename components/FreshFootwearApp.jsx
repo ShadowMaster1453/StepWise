@@ -458,7 +458,7 @@ export default function FreshFootwearApp() {
 
         <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontWeight: 700, marginRight: 12 }}>Total: ${total.toFixed(2)}</div>
-          <button onClick={() => setCartOpen(false)} style={{ padding: '10px', border: '1px solid #000000ff', background: '#000000ff', cursor: 'pointer' }}>Continue</button>
+          <button onClick={() => setCartOpen(false)} style={{ padding: '10px', border: '1px solid #000000ff', background: '#000000ff', color: '#fff', cursor: 'pointer' }}>Continue</button>
           <button onClick={handleCheckout} style={{ padding: '10px', border: 'none', background: '#000', color: '#fff', cursor: 'pointer' }}>Checkout</button>
         </div>
       </div>
