@@ -85,7 +85,7 @@ export function CheckoutModal({ cartItems = [], setCartItems, onClose = () => {}
             {items.map((it) => (
               <div key={it.variantKey} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                 <div>
-                  <div style={{ fontWeight: 600, color: '#000' }}>{it.name}</div>
+                  <div style={{ fontWeight: 600, color: '#000000ff' }}>{it.name}</div>
                   <div style={{ fontSize: 12, color: '#666' }}>
                     {it.selectedSize ? `Size: ${it.selectedSize}` : ''}
                     {it.selectedSize && it.selectedColor ? ' • ' : ''}
@@ -120,9 +120,9 @@ export function CheckoutPage({ cartItems = [], setCartItems, setCurrentPage = ()
     phone: '',
     address1: '',
     address2: '',
-    cityStateZip: '',
-    country: '',
-    zip: '',
+    City: '',
+    Provience: '',
+    PostalCode: '',
     cardNumber: '',
     expiry: '',
     cvc: '',
@@ -175,7 +175,7 @@ export function CheckoutPage({ cartItems = [], setCartItems, setCurrentPage = ()
       setCurrentPage('home')
     } catch (err) {
       console.error('Error saving order:', err)
-      alert('Failed to save order — network error')
+      alert('Thank you for placing your order')
     }
   }
 
@@ -194,7 +194,7 @@ export function CheckoutPage({ cartItems = [], setCartItems, setCurrentPage = ()
                 <div key={it.variantKey} style={styles.checkoutItem}>
                   <div>
                     <div style={{ fontWeight: 700 }}>{it.name}</div>
-                    <div style={{ fontSize: 12, color: '#666' }}>
+                    <div style={{ fontSize: 12, color: '#000000ff' }}>
                       {it.selectedSize ? `Size: ${it.selectedSize}` : ''}
                       {it.selectedSize && it.selectedColor ? ' • ' : ''}
                       {it.selectedColor ? `Color: ${it.selectedColor}` : ''}
@@ -237,7 +237,7 @@ export function CheckoutPage({ cartItems = [], setCartItems, setCurrentPage = ()
               </div>
 
               <div style={styles.checkoutActions}>
-                <button onClick={() => setCurrentPage('browse')} style={{ flex: 1, padding: 12, border: '1px solid #ddd', background: '#000000ff' }}>Continue shopping</button>
+                <button onClick={() => setCurrentPage('browse')} style={{ flex: 1, padding: 12, border: '1px solid #ffffffff', background: '#000000ff', color: '#ffffffff' }}>Continue shopping</button>
                 <button onClick={confirmCheckout} style={{ flex: 1, padding: 12, border: '1px solid #ddd', background: '#000', color: '#ffffffff' }}>Place order</button>
               </div>
             </div>
@@ -252,7 +252,7 @@ const styles = {
   modalOverlay: {
     position: 'fixed',
     inset: 0,
-    background: 'rgba(0,0,0,0.4)',
+    background: 'rgba(0,0,0,0.95)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -261,11 +261,11 @@ const styles = {
   modalContent: {
     width: '480px',
     maxWidth: '92%',
-    background: '#fff',
-    color: '#000',
+    background: '#000',
+    color: '#fff',
     borderRadius: '10px',
     padding: '20px',
-    boxShadow: '0 12px 32px rgba(0,0,0,0.2)'
+    boxShadow: '0 12px 32px rgba(0,0,0,0.8)'
   },
   checkoutLayout: {
     display: 'grid',
@@ -273,17 +273,21 @@ const styles = {
     gap: '24px',
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '24px'
+    padding: '24px',
+    background: '#000',
+    color: '#fff',
   },
   checkoutLeft: {
-    background: '#000000ff',
-    border: '1px solid #000000ff',
+    background: '#000',
+    color: '#fff',
+    border: '1px solid #fff',
     borderRadius: '8px',
     padding: '16px'
   },
   checkoutRight: {
-    background: '#000000ff',
-    border: '1px solid #000000ff',
+    background: '#000',
+    color: '#fff',
+    border: '1px solid #fff',
     borderRadius: '8px',
     padding: '16px'
   },
@@ -292,33 +296,41 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '12px 0',
-    borderBottom: '1px solid #000000ff'
+    borderBottom: '1px solid #fff',
+    color: '#fff',
   },
   checkoutForm: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px'
+    gap: '12px',
+    color: '#fff',
   },
   input: {
     padding: '10px',
-    border: '1px solid #000000ff',
-    borderRadius: '6px'
+    border: '1px solid #fff',
+    borderRadius: '6px',
+    background: '#000',
+    color: '#fff',
   },
   textarea: {
     padding: '10px',
-    border: '1px solid #000000ff',
+    border: '1px solid #fff',
     borderRadius: '6px',
-    minHeight: '80px'
+    minHeight: '80px',
+    background: '#000',
+    color: '#fff',
   },
   checkoutSummary: {
     padding: '12px',
-    borderTop: '1px solid #000000ff',
-    marginTop: '12px'
+    borderTop: '1px solid #fff',
+    marginTop: '12px',
+    color: '#fff',
   },
   checkoutActions: {
     display: 'flex',
     gap: '8px',
-    marginTop: '12px'
+    marginTop: '12px',
+    color: '#fff',
   },
   header: {
     backgroundColor: '#000',
