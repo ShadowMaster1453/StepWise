@@ -222,10 +222,10 @@ export function CheckoutPage({ cartItems = [], setCartItems, setCurrentPage = ()
               <input style={styles.input} name="phone" value={form.phone} onChange={handleChange} placeholder="Phone (optional)" />
               <input style={styles.input} name="address1" value={form.address1} onChange={handleChange} placeholder="Address line 1" />
               <input style={styles.input} name="address2" value={form.address2} onChange={handleChange} placeholder="Address line 2" />
-              <input style={styles.input} name="cityStateZip" value={form.cityStateZip} onChange={handleChange} placeholder="City, State ZIP" />
+              <input style={styles.input} name="cityStateZip" value={form.cityStateZip} onChange={handleChange} placeholder="City" />
               <div style={{ display: 'flex', gap: 8 }}>
-                <input style={{ ...styles.input, flex: 1 }} name="country" value={form.country} onChange={handleChange} placeholder="Country" />
-                <input style={{ ...styles.input, width: 100 }} name="zip" value={form.zip} onChange={handleChange} placeholder="ZIP" />
+                <input style={{ ...styles.input, flex: 1 }} name="country" value={form.country} onChange={handleChange} placeholder="Province" />
+                <input style={{ ...styles.input, width: 100 }} name="zip" value={form.zip} onChange={handleChange} placeholder="Postal Code" />
               </div>
               <div>
                 <div style={{ fontWeight: 700, marginTop: 8 }}>Payment</div>
