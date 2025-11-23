@@ -12,6 +12,7 @@ export default function FreshFootwearApp() {
   const [cartItems, setCartItems] = useState([])
   const [cartOpen, setCartOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const styles = {
     container: {
@@ -570,6 +571,8 @@ export default function FreshFootwearApp() {
               type="text"
               placeholder="Search...."
               style={styles.searchBar}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -705,7 +708,23 @@ export default function FreshFootwearApp() {
     )
   }
 
-  const renderBrowsePage = () => (
+  const renderBrowsePage = () => {
+  // 1) filter by category
+  let filtered = sampleProducts.filter(
+    (product) => selectedFilter === 'All' || product.category === selectedFilter
+  )
+
+  // 2) filter by search term (name or brand)
+  if (searchTerm.trim() !== '') {
+    const term = searchTerm.toLowerCase()
+    filtered = filtered.filter(
+      (product) =>
+        product.name.toLowerCase().includes(term) ||
+        product.brand.toLowerCase().includes(term)
+    )
+  }
+
+  return (
     <>
       {/* Header */}
       <header style={styles.header}>
@@ -717,6 +736,17 @@ export default function FreshFootwearApp() {
         <button style={styles.backButton} onClick={() => handleNavigate('home')}>
           <span>&larr;</span>
         </button>
+      </div>
+
+      {/* Search Bar on browse page too (so you can search while viewing products) */}
+      <div style={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="Search...."
+          style={styles.searchBar}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       {/* Category Filter Tabs */}
@@ -737,10 +767,14 @@ export default function FreshFootwearApp() {
 
       {/* Products Grid */}
       <div style={styles.productsGrid}>
-        <div style={{ ...styles.topGrid, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '25px' }}>
-          {sampleProducts
-            .filter(product => selectedFilter === 'All' || product.category === selectedFilter)
-            .map((product) => (
+        <div
+          style={{
+            ...styles.topGrid,
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '25px'
+          }}
+        >
+          {filtered.map((product) => (
             <div
               key={product.id}
               style={styles.productCard}
@@ -755,7 +789,16 @@ export default function FreshFootwearApp() {
               }}
             >
               <div style={styles.productImage}>
-                <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '5px' }} />
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '5px'
+                  }}
+                />
               </div>
               <div style={styles.productTitle}>{product.name}</div>
               <div style={styles.productUpdate}>Updated {product.updated}</div>
@@ -764,23 +807,5 @@ export default function FreshFootwearApp() {
         </div>
       </div>
     </>
-  )
-
-  return (
-    <div style={styles.container}>
-      <CartButton />
-      {currentPage === 'home' && renderHomePage()}
-      {currentPage === 'browse' && renderBrowsePage()}
-      {currentPage === 'details' && renderDetailsPage()}
-      {currentPage === 'checkout' && (
-        <CheckoutPage
-          cartItems={cartItems}
-          setCartItems={setCartItems}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-      {cartOpen && <CartDropdown />}
-      {checkoutOpen && <CheckoutModal />}
-    </div>
   )
 }
