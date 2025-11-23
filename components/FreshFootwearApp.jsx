@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import CheckoutPage from './Checkout.jsx';
 
 export default function FreshFootwearApp() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -381,7 +382,10 @@ export default function FreshFootwearApp() {
   }
 
   const handleClearCart = () => setCartItems([])
-  const handleCheckout = () => { setCartOpen(false); setCheckoutOpen(true) }
+  const handleCheckout = () => {
+    setCartOpen(false)
+    setCurrentPage('checkout')
+  }
 
   const confirmCheckout = () => {
     const grouped = cartItems.reduce((acc, item) => {
@@ -768,6 +772,13 @@ export default function FreshFootwearApp() {
       {currentPage === 'home' && renderHomePage()}
       {currentPage === 'browse' && renderBrowsePage()}
       {currentPage === 'details' && renderDetailsPage()}
+      {currentPage === 'checkout' && (
+        <CheckoutPage
+          cartItems={cartItems}
+          setCartItems={setCartItems}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
       {cartOpen && <CartDropdown />}
       {checkoutOpen && <CheckoutModal />}
     </div>
