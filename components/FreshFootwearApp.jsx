@@ -1,18 +1,17 @@
 'use client';
 import { useState, useEffect } from 'react';
-import CheckoutPage from './Checkout.jsx';
 
 export default function FreshFootwearApp() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState('home')
   const [selectedFilter, setSelectedFilter] = useState('All')
+  const [selectedBrand, setSelectedBrand] = useState(null)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [selectedSize, setSelectedSize] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
   const [cartItems, setCartItems] = useState([])
   const [cartOpen, setCartOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
 
   const styles = {
     container: {
@@ -304,36 +303,43 @@ export default function FreshFootwearApp() {
   ]
 
   const sampleProducts = [
-    { id: 1, name: 'Air Max Plus', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 170.00, updated: 'today', description: 'Iconic running shoe featuring Nike\'s revolutionary "Tuned Air" technology with visible Air units in heel and forefoot. Inspired by Florida\'s coastal sunsets with distinctive TPU fingers design. Provides enhanced stability, responsive cushioning and impact absorption with breathable mesh upper.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Gray'], rating: 4.5, reviews: 324, image: '/images/nikeairmaxplus_black.webp' },
-    { id: 2, name: 'Ultraboost 5', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 180.00, updated: 'today', description: 'Revolutionary running shoe with 9mm more LIGHT BOOST foam offering 2% more forefoot energy return than previous models. Features adaptive Primeknit upper with enhanced breathability and Continental rubber outsole. 30% lighter than original Boost with highest energy return yet.', sizes: ['5','6','7','8','9','10','11'], colors: ['Black','White','Navy'], rating: 4.8, reviews: 567, image: '/images/ultraboost_white.webp' },
-    { id: 3, name: 'Fresh Foam X 1080 v14', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Women', price: 165.00, updated: 'yesterday', description: 'Premium daily trainer with Fresh Foam X midsole (38mm heel/32mm forefoot stack, 6mm drop). Features triple jacquard mesh upper with increased breathability and higher midsole sidewalls for enhanced stability. Ideal for easy runs, recovery and long distances with plush, trustworthy ride.', sizes: ['5','6','7','8','9','10','11'], colors: ['Gray','Black','Blue'], rating: 4.3, reviews: 198, image: '/images/freshfoam_white.webp' },
-    { id: 4, name: 'Go Walk 6', brand: 'Skechers', brandLogo: '/images/sketchers_logo.png', category: 'Women', price: 75.00, updated: 'yesterday', description: 'Next level comfort walking shoe featuring Stretch Fit engineered mesh upper with sock-like feel, lightweight ULTRA GO cushioning midsole, Air-Cooled Goga Mat insole and Hyper Pillars for added support. Solid shock absorption with pleasant springback for all-day wear.', sizes: ['5','6','7','8','9','10'], colors: ['Black','Navy','Gray'], rating: 4.2, reviews: 412, image: '/images/gowalk_black.avif' },
-    { id: 5, name: 'Charged Assert 10', brand: 'Under Armour', brandLogo: '/images/underarmour_logo.jpg', category: 'Men', price: 75.00, updated: '2 days ago', description: 'Budget-friendly running shoe with Charged Cushioning midsole that absorbs impact and converts it to responsive energy. Features breathable mesh upper with leather overlays, deluxe Comfort System sockliner and solid rubber outsole. Stable and comfortable for runs up to 6-7 miles.', sizes: ['7','8','9','10','11','12'], colors: ['Black','Red','White'], rating: 4.4, reviews: 256, image: '/images/chargedassert_black.jpg' },
-    { id: 6, name: 'Suede Classic XXI', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Men', price: 85.00, updated: '2 days ago', description: 'Iconic lifestyle sneaker that hit the scene in 1968, now updated for the 21st century. Features premium suede upper with comfort sockliner for instant cushioning, padded collar, cushioned midsole and durable rubber outsole. Timeless style meets modern comfort with gold-toned Puma details.', sizes: ['7','8','9','10','11','12'], colors: ['Black','Navy','Burgundy'], rating: 4.6, reviews: 389, image: '/images/suedeclassix_blue.avif' },
-    { id: 7, name: 'Court Vision Low', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 80.00, updated: '3 days ago', description: 'Court-style sneaker bringing \'80s basketball fast break style to today\'s culture. Features synthetic and real leather upper that softens with wear, perforations for breathability and classic rubber cupsole. Basketball-inspired design with Air Force 1 sole and refined Dunk-like profile for everyday casual wear.', sizes: ['7','8','9','10','11','12'], colors: ['White','Black','Gray'], rating: 4.3, reviews: 221, image: '/images/courtvision_black.webp' },
-    { id: 8, name: 'Superstar II', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Men', price: 100.00, updated: '3 days ago', description: 'Iconic basketball-inspired sneaker with signature rubber shell toe and classic leather upper. Features the legendary Three Stripes design, cushioned insole and durable rubber cupsole. A timeless streetwear staple that blends sports heritage with modern style.', sizes: ['7','8','9','10','11','12'], colors: ['White','Black','Green'], rating: 4.7, reviews: 634, image: '/images/superstar_black.webp' },
-    { id: 9, name: '574 Core', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Children', price: 99.95, updated: '4 days ago', description: 'Heritage sneaker built as versatile hybrid road/trail design on wider last. Features ENCAP midsole cushioning combining soft foam with durable polyurethane rim for all-day support, lightweight EVA foam cushioning. Upper made of 50% recycled content. Reliable, rugged and durable for active lifestyles.', sizes: ['1','2','3','4','5','6'], colors: ['Gray','Navy','Burgundy'], rating: 4.5, reviews: 445, image: '/images/574core_white.jpg' },
-    { id: 10, name: 'Pegasus 40', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 130.00, updated: 'today', description: 'Great all-rounder trainer suitable for everything from Park Run to speed sessions to marathons. Features React foam midsole with front and heel Zoom Air bags for responsive cushioning, redesigned engineered mesh upper with improved mid-foot band support, and 10mm drop. Trusty, reliable training partner weighing just 9.4 oz.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Blue'], rating: 4.9, reviews: 892, image: '/images/pegasus_black.webp' },
-    { id: 11, name: 'Solarboost 5', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 130.00, updated: 'yesterday', description: 'Workhorse running shoe with support, cushioning and energy for building consistency or upping mileage. Features full-length Light Boost foam (30% lighter than standard Boost), Linear Energy Push system for smoother transitions, technical mesh upper with integrated tongue, and Continental rubber outsole. Suitable for 5K to marathon distances with 10mm drop.', sizes: ['5','6','7','8','9','10','11'], colors: ['Black','Gray','Red'], rating: 4.6, reviews: 512, image: '/images/solarboost_white.jpg' },
-    { id: 12, name: '990v6', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Men', price: 200.00, updated: '2 days ago', description: 'Premium Made in USA lifestyle sneaker featuring FuelCell foam technology for superior cushioning and rebound, ENCAP midsole for exceptional support, and genuine suede/mesh/leather throughout. Wider forefoot (113.8mm) provides outstanding stability. Lighter than v5 at 12.9oz yet maintains premium craftsmanship. 40th anniversary of the iconic 990 line.', sizes: ['7','8','9','10','11','12','13'], colors: ['Gray','Navy','Black'], rating: 4.8, reviews: 723, image: '/images/990v6_black.webp' },
-    { id: 13, name: 'Velocity Nitro 3', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Children', price: 135.00, updated: '3 days ago', description: 'Lightweight daily trainer with 36mm heel/26mm forefoot supercritical NITROFOAM (nitrogen-infused) providing explosive energy return. Features engineered breathable mesh upper with PWRTAPE support, PumaGrip mini lugged outsole for leading traction, 10mm drop. Versatile cushioned trainer suitable for long runs, speed sessions and daily training at affordable price. Weighs just 9.1oz.', sizes: ['1','2','3','4','5','6'], colors: ['Black','White','Blue'], rating: 4.4, reviews: 298, image: '/images/velocitynitro_black.avif' },
-    { id: 14, name: 'Air Zoom Structure 25', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 140.00, updated: '3 days ago', description: 'Stability running shoe with dual Zoom Air units for responsive cushioning and medial post for support. Features engineered mesh upper with Flywire technology for secure fit and durable rubber outsole. Perfect for runners who need extra stability with 10mm drop.', sizes: ['7','8','9','10','11','12'], colors: ['Black','Blue','Gray'], rating: 4.5, reviews: 412, image: '/images/structure25_black.avif' },
-    { id: 15, name: 'Air Zoom Pegasus 40', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Women', price: 140.00, updated: 'today', description: 'Versatile running shoe with React foam midsole and dual Zoom Air units for responsive cushioning. Features engineered mesh upper for breathability and improved mid-foot support. Perfect all-rounder for daily training, tempo runs and race day with 10mm drop.', sizes: ['5','6','7','8','9','10','11'], colors: ['Pink','White','Purple'], rating: 4.7, reviews: 638, image: '/images/airzoompegasus_black.webp' },
-    { id: 16, name: 'Cali Court', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Women', price: 75.00, updated: 'yesterday', description: 'Retro-inspired lifestyle sneaker with classic court design and modern comfort. Features leather upper with perforated details, cushioned midsole and durable rubber outsole. Perfect for casual wear with vintage California vibes and contemporary style.', sizes: ['5','6','7','8','9','10','11'], colors: ['Black','Blue','Pink'], rating: 4.6, reviews: 521, image: '/images/calicourt_white.webp' },
-    { id: 17, name: 'Air Force 1 \'07', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Women', price: 110.00, updated: '2 days ago', description: 'Iconic basketball-inspired sneaker with timeless style and modern comfort. Features durable leather upper, Nike Air cushioning in heel, and classic rubber cupsole with pivot points. A streetwear essential with clean lines and vintage appeal.', sizes: ['5','6','7','8','9','10','11'], colors: ['White','Gray','Navy'], rating: 4.5, reviews: 389, image: '/images/airforce_white.webp' },
-    { id: 18, name: 'Cloudfoam Pure 2.0', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 70.00, updated: '3 days ago', description: 'Comfortable lifestyle sneaker with Cloudfoam cushioning for all-day wear. Features breathable mesh upper with seamless overlays and memory foam sockliner. Perfect for casual wear and light activity with clean, minimalist design.', sizes: ['5','6','7','8','9','10','11'], colors: ['Blue','Black','White'], rating: 4.6, reviews: 445, image: '/images/cloudfoam_white.avif' },
-    { id: 19, name: 'Revolution 7', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Children', price: 65.00, updated: 'today', description: 'Durable kids running shoe with soft foam cushioning and flexible design. Features breathable mesh upper and rubber outsole for traction. Perfect for active kids with comfortable fit.', sizes: ['1','2','3','4','5','6'], colors: ['Black','Blue','Pink'], rating: 4.3, reviews: 289, image: '/images/revolution7.webp' },
-    { id: 20, name: 'Racer TR 3', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Children', price: 55.00, updated: 'yesterday', description: 'Lightweight kids training shoe with Cloudfoam cushioning for comfort. Features durable mesh upper and rubber outsole. Great for running and playing with hook-and-loop strap for easy on/off.', sizes: ['1','2','3','4','5','6'], colors: ['Black','Red','Blue'], rating: 4.2, reviews: 312, image: '/images/trracer3_black.avif' },
-    { id: 21, name: 'FuelCore Rush', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Children', price: 60.00, updated: '2 days ago', description: 'Kids running shoe with REVlite midsole for lightweight cushioning. Features breathable mesh upper and durable rubber outsole. Perfect for school and play with comfortable fit.', sizes: ['1','2','3','4','5','6'], colors: ['Gray','Pink','Blue'], rating: 4.4, reviews: 267, image: '/images/fuelcore_grey.webp' },
-    { id: 22, name: 'Enzo 2', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Children', price: 50.00, updated: '3 days ago', description: 'Kids athletic shoe with SoftFoam cushioning for comfort. Features mesh and synthetic upper for durability and breathability. Great for everyday wear and light activity.', sizes: ['1','2','3','4','5','6'], colors: ['Black','White','Red'], rating: 4.1, reviews: 198, image: '/images/enzo2_black.jpg' },
-    { id: 23, name: 'Charged Pursuit 3', brand: 'Under Armour', brandLogo: '/images/underarmour_logo.jpg', category: 'Children', price: 55.00, updated: '4 days ago', description: 'Kids running shoe with Charged Cushioning midsole for responsive comfort. Features breathable mesh upper and durable rubber outsole. Perfect for active kids with supportive fit.', sizes: ['1','2','3','4','5','6'], colors: ['Black','Blue','Gray'], rating: 4.3, reviews: 223, image: '/images/chargedpursuit_black.jpg' },
-    { id: 24, name: 'D-Lites', brand: 'Skechers', brandLogo: '/images/sketchers_logo.png', category: 'Children', price: 60.00, updated: '4 days ago', description: 'Kids lifestyle sneaker with Air-Cooled Memory Foam insole for comfort. Features athletic sporty style with durable upper and flexible rubber outsole. Great for all-day wear.', sizes: ['1','2','3','4','5','6'], colors: ['White','Pink','Black'], rating: 4.5, reviews: 334, image: '/images/d-lites_blue.webp' },
+    { id: 1, name: 'Air Max Plus', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 170.00, updated: 'today', description: 'Iconic running shoe featuring Nike\'s revolutionary "Tuned Air" technology with visible Air units in heel and forefoot. Inspired by Florida\'s coastal sunsets with distinctive TPU fingers design. Provides enhanced stability, responsive cushioning and impact absorption with breathable mesh upper.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Gray'], rating: 4.5, reviews: 324, image: '/images/nikeairmaxplus_black.webp', colorImages: { 'Black': '/images/nikeairmaxplus_black.webp', 'White': '/images/nikeairmax_white.webp', 'Gray': '/images/nikeairmax_grey.webp' } },
+    { id: 2, name: 'Ultraboost 5', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 180.00, updated: 'today', description: 'Revolutionary running shoe with 9mm more LIGHT BOOST foam offering 2% more forefoot energy return than previous models. Features adaptive Primeknit upper with enhanced breathability and Continental rubber outsole. 30% lighter than original Boost with highest energy return yet.', sizes: ['5','6','7','8','9','10','11'], colors: ['Black','White','Beige'], rating: 4.8, reviews: 567, image: '/images/ultraboost_white.webp', colorImages: { 'Black': '/images/ultraboost_black.webp', 'White': '/images/ultraboost_white.webp', 'Beige': '/images/ultraboost_beige.webp' } },
+    { id: 3, name: 'Fresh Foam X 1080 v14', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Women', price: 165.00, updated: 'yesterday', description: 'Premium daily trainer with Fresh Foam X midsole (38mm heel/32mm forefoot stack, 6mm drop). Features triple jacquard mesh upper with increased breathability and higher midsole sidewalls for enhanced stability. Ideal for easy runs, recovery and long distances with plush, trustworthy ride.', sizes: ['5','6','7','8','9','10','11'], colors: ['White','Black','Pink'], rating: 4.3, reviews: 198, image: '/images/freshfoam_white.webp', colorImages: { 'White': '/images/freshfoam_white.webp', 'Black': '/images/freshfoam_black.webp', 'Pink': '/images/freshfoam_pink.webp' } },
+    { id: 4, name: 'Go Walk 6', brand: 'Skechers', brandLogo: '/images/sketchers_logo.png', category: 'Women', price: 75.00, updated: 'yesterday', description: 'Next level comfort walking shoe featuring Stretch Fit engineered mesh upper with sock-like feel, lightweight ULTRA GO cushioning midsole, Air-Cooled Goga Mat insole and Hyper Pillars for added support. Solid shock absorption with pleasant springback for all-day wear.', sizes: ['5','6','7','8','9','10'], colors: ['Black','Navy'], rating: 4.2, reviews: 412, image: '/images/gowalk_black.avif', colorImages: { 'Black': '/images/gowalk_black.avif', 'Navy': '/images/gowalk_navy.avif' } },
+    { id: 5, name: 'Charged Assert 10', brand: 'Under Armour', brandLogo: '/images/underarmour_logo.jpg', category: 'Men', price: 75.00, updated: '2 days ago', description: 'Budget-friendly running shoe with Charged Cushioning midsole that absorbs impact and converts it to responsive energy. Features breathable mesh upper with leather overlays, deluxe Comfort System sockliner and solid rubber outsole. Stable and comfortable for runs up to 6-7 miles.', sizes: ['7','8','9','10','11','12'], colors: ['Black','Red','White'], rating: 4.4, reviews: 256, image: '/images/chargedassert_black.jpg', colorImages: { 'Black': '/images/chargedassert_black.jpg', 'Red': '/images/chargedassert_red.avif', 'White': '/images/chargedassert_white.avif' } },
+    { id: 6, name: 'Suede Classic XXI', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Men', price: 85.00, updated: '2 days ago', description: 'Iconic lifestyle sneaker that hit the scene in 1968, now updated for the 21st century. Features premium suede upper with comfort sockliner for instant cushioning, padded collar, cushioned midsole and durable rubber outsole. Timeless style meets modern comfort with gold-toned Puma details.', sizes: ['7','8','9','10','11','12'], colors: ['Blue','Black'], rating: 4.6, reviews: 389, image: '/images/suedeclassix_blue.avif', colorImages: { 'Blue': '/images/suedeclassix_blue.avif', 'Black': '/images/suedeclassic_black.avif' } },
+    { id: 7, name: 'Court Vision Low', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 80.00, updated: '3 days ago', description: 'Court-style sneaker bringing \'80s basketball fast break style to today\'s culture. Features synthetic and real leather upper that softens with wear, perforations for breathability and classic rubber cupsole. Basketball-inspired design with Air Force 1 sole and refined Dunk-like profile for everyday casual wear.', sizes: ['7','8','9','10','11','12'], colors: ['White','Black'], rating: 4.3, reviews: 221, image: '/images/courtvision_white.webp', colorImages: { 'White': '/images/courtvision_white.webp', 'Black': '/images/courtvision_black.avif' } },
+    { id: 8, name: 'Superstar II', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Men', price: 100.00, updated: '3 days ago', description: 'Iconic basketball-inspired sneaker with signature rubber shell toe and classic leather upper. Features the legendary Three Stripes design, cushioned insole and durable rubber cupsole. A timeless streetwear staple that blends sports heritage with modern style.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White'], rating: 4.7, reviews: 634, image: '/images/superstar_black.webp', colorImages: { 'Black': '/images/superstar_black.webp', 'White': '/images/superstar_white.avif' } },
+    { id: 9, name: '574 Core', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Children', price: 99.95, updated: '4 days ago', description: 'Heritage sneaker built as versatile hybrid road/trail design on wider last. Features ENCAP midsole cushioning combining soft foam with durable polyurethane rim for all-day support, lightweight EVA foam cushioning. Upper made of 50% recycled content. Reliable, rugged and durable for active lifestyles.', sizes: ['1','2','3','4','5','6'], colors: ['White','Black','Blue'], rating: 4.5, reviews: 445, image: '/images/574core_white.jpg', colorImages: { 'White': '/images/574core_white.jpg', 'Black': '/images/574core_black.webp', 'Blue': '/images/574core_blue.webp' } },
+    { id: 10, name: 'Pegasus 40', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 130.00, updated: 'today', description: 'Great all-rounder trainer suitable for everything from Park Run to speed sessions to marathons. Features React foam midsole with front and heel Zoom Air bags for responsive cushioning, redesigned engineered mesh upper with improved mid-foot band support, and 10mm drop. Trusty, reliable training partner weighing just 9.4 oz.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Neon'], rating: 4.9, reviews: 892, image: '/images/pegasus_black.webp', colorImages: { 'Black': '/images/pegasus_black.webp', 'White': '/images/pegasus_white.avif', 'Neon': '/images/pegasus_neon.avif' } },
+    { id: 11, name: 'Solarboost 5', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 130.00, updated: 'yesterday', description: 'Workhorse running shoe with support, cushioning and energy for building consistency or upping mileage. Features full-length Light Boost foam (30% lighter than standard Boost), Linear Energy Push system for smoother transitions, technical mesh upper with integrated tongue, and Continental rubber outsole. Suitable for 5K to marathon distances with 10mm drop.', sizes: ['5','6','7','8','9','10','11'], colors: ['White','Red'], rating: 4.6, reviews: 512, image: '/images/solarboost_white.jpg', colorImages: { 'White': '/images/solarboost_white.jpg', 'Red': '/images/solarboost_red.avif' } },
+    { id: 12, name: '990v6', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Men', price: 200.00, updated: '2 days ago', description: 'Premium Made in USA lifestyle sneaker featuring FuelCell foam technology for superior cushioning and rebound, ENCAP midsole for exceptional support, and genuine suede/mesh/leather throughout. Wider forefoot (113.8mm) provides outstanding stability. Lighter than v5 at 12.9oz yet maintains premium craftsmanship. 40th anniversary of the iconic 990 line.', sizes: ['7','8','9','10','11','12','13'], colors: ['Black','Blue'], rating: 4.8, reviews: 723, image: '/images/990v6_black.webp', colorImages: { 'Black': '/images/990v6_black.webp', 'Blue': '/images/990v6_blue.webp' } },
+    { id: 13, name: 'Velocity Nitro 3', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Children', price: 135.00, updated: '3 days ago', description: 'Lightweight daily trainer with 36mm heel/26mm forefoot supercritical NITROFOAM (nitrogen-infused) providing explosive energy return. Features engineered breathable mesh upper with PWRTAPE support, PumaGrip mini lugged outsole for leading traction, 10mm drop. Versatile cushioned trainer suitable for long runs, speed sessions and daily training at affordable price. Weighs just 9.1oz.', sizes: ['1','2','3','4','5','6'], colors: ['Black','Blue','Pink'], rating: 4.4, reviews: 298, image: '/images/velocitynitro_black.avif', colorImages: { 'Black': '/images/velocitynitro_black.avif', 'Blue': '/images/velocitynitro_blue.avif', 'Pink': '/images/velocitynitro_pink.avif' } },
+    { id: 14, name: 'Air Zoom Structure 25', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 140.00, updated: '3 days ago', description: 'Stability running shoe with dual Zoom Air units for responsive cushioning and medial post for support. Features engineered mesh upper with Flywire technology for secure fit and durable rubber outsole. Perfect for runners who need extra stability with 10mm drop.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White'], rating: 4.5, reviews: 412, image: '/images/structure25_black.avif', colorImages: { 'Black': '/images/structure25_black.avif', 'White': '/images/structure25_white.avif' } },
+    { id: 15, name: 'Air Zoom Pegasus 40', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Women', price: 140.00, updated: 'today', description: 'Versatile running shoe with React foam midsole and dual Zoom Air units for responsive cushioning. Features engineered mesh upper for breathability and improved mid-foot support. Perfect all-rounder for daily training, tempo runs and race day with 10mm drop.', sizes: ['5','6','7','8','9','10','11'], rating: 4.7, reviews: 638, image: '/images/airzoompegasus_black.webp' },
+    { id: 16, name: 'Cali Court', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Women', price: 75.00, updated: 'yesterday', description: 'Retro-inspired lifestyle sneaker with classic court design and modern comfort. Features leather upper with perforated details, cushioned midsole and durable rubber outsole. Perfect for casual wear with vintage California vibes and contemporary style.', sizes: ['5','6','7','8','9','10','11'], rating: 4.6, reviews: 521, image: '/images/calicourt_white.webp' },
+    { id: 17, name: 'Air Force 1 \'07', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Women', price: 110.00, updated: '2 days ago', description: 'Iconic basketball-inspired sneaker with timeless style and modern comfort. Features durable leather upper, Nike Air cushioning in heel, and classic rubber cupsole with pivot points. A streetwear essential with clean lines and vintage appeal.', sizes: ['5','6','7','8','9','10','11'], colors: ['White','Black','Beige'], rating: 4.5, reviews: 389, image: '/images/airforce_white.webp', colorImages: { 'White': '/images/airforce_white.webp', 'Black': '/images/airforce_black.avif', 'Beige': '/images/airforce_beige.avif' } },
+    { id: 18, name: 'Cloudfoam Pure 2.0', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 70.00, updated: '3 days ago', description: 'Comfortable lifestyle sneaker with Cloudfoam cushioning for all-day wear. Features breathable mesh upper with seamless overlays and memory foam sockliner. Perfect for casual wear and light activity with clean, minimalist design.', sizes: ['5','6','7','8','9','10','11'], colors: ['White','Black'], rating: 4.6, reviews: 445, image: '/images/cloudfoam_white.avif', colorImages: { 'White': '/images/cloudfoam_white.avif', 'Black': '/images/cloudfoam_black.avif' } },
+    { id: 19, name: 'Revolution 7', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Children', price: 65.00, updated: 'today', description: 'Durable kids running shoe with soft foam cushioning and flexible design. Features breathable mesh upper and rubber outsole for traction. Perfect for active kids with comfortable fit.', sizes: ['1','2','3','4','5','6'], colors: ['Black','Blue'], rating: 4.3, reviews: 289, image: '/images/revolution7.webp', colorImages: { 'Black': '/images/revolution7.webp', 'Blue': '/images/revolution7_blue.avif' } },
+    { id: 20, name: 'Racer TR 3', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Children', price: 55.00, updated: 'yesterday', description: 'Lightweight kids training shoe with Cloudfoam cushioning for comfort. Features durable mesh upper and rubber outsole. Great for running and playing with hook-and-loop strap for easy on/off.', sizes: ['1','2','3','4','5','6'], rating: 4.2, reviews: 312, image: '/images/trracer3_black.avif' },
+    { id: 21, name: 'FuelCore Rush', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Children', price: 60.00, updated: '2 days ago', description: 'Kids running shoe with REVlite midsole for lightweight cushioning. Features breathable mesh upper and durable rubber outsole. Perfect for school and play with comfortable fit.', sizes: ['1','2','3','4','5','6'], rating: 4.4, reviews: 267, image: '/images/fuelcore_grey.webp' },
+    { id: 22, name: 'Enzo 2', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Children', price: 50.00, updated: '3 days ago', description: 'Kids athletic shoe with SoftFoam cushioning for comfort. Features mesh and synthetic upper for durability and breathability. Great for everyday wear and light activity.', sizes: ['1','2','3','4','5','6'], rating: 4.1, reviews: 198, image: '/images/enzo2_black.jpg' },
+    { id: 23, name: 'Charged Pursuit 3', brand: 'Under Armour', brandLogo: '/images/underarmour_logo.jpg', category: 'Children', price: 55.00, updated: '4 days ago', description: 'Kids running shoe with Charged Cushioning midsole for responsive comfort. Features breathable mesh upper and durable rubber outsole. Perfect for active kids with supportive fit.', sizes: ['1','2','3','4','5','6'], rating: 4.3, reviews: 223, image: '/images/chargedpursuit_black.jpg' },
+    { id: 24, name: 'D-Lites', brand: 'Skechers', brandLogo: '/images/sketchers_logo.png', category: 'Children', price: 60.00, updated: '4 days ago', description: 'Kids lifestyle sneaker with Air-Cooled Memory Foam insole for comfort. Features athletic sporty style with durable upper and flexible rubber outsole. Great for all-day wear.', sizes: ['1','2','3','4','5','6'], rating: 4.5, reviews: 334, image: '/images/d-lites_blue.webp' },
   ]
 
   const handleNavigate = (page, filter = 'All') => {
     setCurrentPage(page)
     setSelectedFilter(filter)
+    setSelectedBrand(null)
     setSidebarOpen(false)
+  }
+
+  const handleBrandClick = (brandName) => {
+    setCurrentPage('browse')
+    setSelectedFilter('All')
+    setSelectedBrand(brandName)
   }
 
   const handleProductClick = (product) => {
@@ -383,10 +389,7 @@ export default function FreshFootwearApp() {
   }
 
   const handleClearCart = () => setCartItems([])
-  const handleCheckout = () => {
-    setCartOpen(false)
-    setCurrentPage('checkout')
-  }
+  const handleCheckout = () => { setCartOpen(false); setCheckoutOpen(true) }
 
   const confirmCheckout = () => {
     const grouped = cartItems.reduce((acc, item) => {
@@ -459,7 +462,7 @@ export default function FreshFootwearApp() {
 
         <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontWeight: 700, marginRight: 12 }}>Total: ${total.toFixed(2)}</div>
-          <button onClick={() => setCartOpen(false)} style={{ padding: '10px', border: '1px solid #000000ff', background: '#000000ff', color: '#fff', cursor: 'pointer' }}>Continue</button>
+          <button onClick={() => setCartOpen(false)} style={{ padding: '10px', border: '1px solid #000000ff', background: '#000000ff', cursor: 'pointer' }}>Continue</button>
           <button onClick={handleCheckout} style={{ padding: '10px', border: 'none', background: '#000', color: '#fff', cursor: 'pointer' }}>Checkout</button>
         </div>
       </div>
@@ -571,8 +574,6 @@ export default function FreshFootwearApp() {
               type="text"
               placeholder="Search...."
               style={styles.searchBar}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -584,7 +585,7 @@ export default function FreshFootwearApp() {
               <div
                 key={index}
                 style={styles.brandCard}
-                onClick={() => handleNavigate('browse')}
+                onClick={() => handleBrandClick(brand.name)}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-5px)'
                   e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)'
@@ -606,6 +607,14 @@ export default function FreshFootwearApp() {
   const renderDetailsPage = () => {
     if (!selectedProduct) return null
 
+    // Get the current image based on selected color
+    const getCurrentImage = () => {
+      if (selectedProduct.colorImages && selectedColor && selectedProduct.colorImages[selectedColor]) {
+        return selectedProduct.colorImages[selectedColor]
+      }
+      return selectedProduct.image
+    }
+
     return (
       <>
         {/* Header */}
@@ -625,7 +634,7 @@ export default function FreshFootwearApp() {
           <div style={styles.detailsContent}>
             {/* Product Image */}
             <div style={styles.detailsImageSection}>
-              <img src={selectedProduct.image} alt={selectedProduct.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+              <img src={getCurrentImage()} alt={selectedProduct.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
             </div>
 
             {/* Product Info */}
@@ -670,6 +679,7 @@ export default function FreshFootwearApp() {
               </div>
 
               {/* Select Color */}
+              {selectedProduct.colors && selectedProduct.colors.length > 0 && (
               <div style={styles.detailsSection}>
                 <div style={styles.detailsSectionTitle}>Select Color</div>
                 <div style={styles.colorGrid}>
@@ -691,6 +701,7 @@ export default function FreshFootwearApp() {
                   ))}
                 </div>
               </div>
+              )}
 
               {/* Add to Cart Button */}
               <button
@@ -708,23 +719,7 @@ export default function FreshFootwearApp() {
     )
   }
 
-  const renderBrowsePage = () => {
-  // 1) filter by category
-  let filtered = sampleProducts.filter(
-    (product) => selectedFilter === 'All' || product.category === selectedFilter
-  )
-
-  // 2) filter by search term (name or brand)
-  if (searchTerm.trim() !== '') {
-    const term = searchTerm.toLowerCase()
-    filtered = filtered.filter(
-      (product) =>
-        product.name.toLowerCase().includes(term) ||
-        product.brand.toLowerCase().includes(term)
-    )
-  }
-
-  return (
+  const renderBrowsePage = () => (
     <>
       {/* Header */}
       <header style={styles.header}>
@@ -738,16 +733,28 @@ export default function FreshFootwearApp() {
         </button>
       </div>
 
-      {/* Search Bar on browse page too (so you can search while viewing products) */}
-      <div style={styles.searchContainer}>
-        <input
-          type="text"
-          placeholder="Search...."
-          style={styles.searchBar}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+      {/* Brand Filter Display */}
+      {selectedBrand && (
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <span style={{ fontSize: '18px', fontWeight: 'bold', marginRight: '15px' }}>
+            Showing: {selectedBrand}
+          </span>
+          <button
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#000',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+            onClick={() => setSelectedBrand(null)}
+          >
+            Clear Brand Filter
+          </button>
+        </div>
+      )}
 
       {/* Category Filter Tabs */}
       <div style={styles.filterTabs}>
@@ -767,14 +774,11 @@ export default function FreshFootwearApp() {
 
       {/* Products Grid */}
       <div style={styles.productsGrid}>
-        <div
-          style={{
-            ...styles.topGrid,
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '25px'
-          }}
-        >
-          {filtered.map((product) => (
+        <div style={{ ...styles.topGrid, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '25px' }}>
+          {sampleProducts
+            .filter(product => selectedFilter === 'All' || product.category === selectedFilter)
+            .filter(product => !selectedBrand || product.brand === selectedBrand)
+            .map((product) => (
             <div
               key={product.id}
               style={styles.productCard}
@@ -789,16 +793,7 @@ export default function FreshFootwearApp() {
               }}
             >
               <div style={styles.productImage}>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    borderRadius: '5px'
-                  }}
-                />
+                <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '5px' }} />
               </div>
               <div style={styles.productTitle}>{product.name}</div>
               <div style={styles.productUpdate}>Updated {product.updated}</div>
@@ -807,5 +802,16 @@ export default function FreshFootwearApp() {
         </div>
       </div>
     </>
+  )
+
+  return (
+    <div style={styles.container}>
+      <CartButton />
+      {currentPage === 'home' && renderHomePage()}
+      {currentPage === 'browse' && renderBrowsePage()}
+      {currentPage === 'details' && renderDetailsPage()}
+      {cartOpen && <CartDropdown />}
+      {checkoutOpen && <CheckoutModal />}
+    </div>
   )
 }
