@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import CheckoutPage from './Checkout.jsx';
 
 export default function FreshFootwearApp() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -11,7 +12,6 @@ export default function FreshFootwearApp() {
   const [selectedColor, setSelectedColor] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const styles = {
@@ -367,23 +367,6 @@ export default function FreshFootwearApp() {
       padding: '8px 0',
       borderBottom: '1px solid #f0f0f0',
     },
-    modalOverlay: {
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(0,0,0,0.4)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1200,
-    },
-    modalContent: {
-      width: '480px',
-      maxWidth: '92%',
-      background: '#fff',
-      borderRadius: '10px',
-      padding: '20px',
-      boxShadow: '0 12px 32px rgba(0,0,0,0.2)',
-    },
   };
 
   const navItems = [
@@ -402,7 +385,6 @@ export default function FreshFootwearApp() {
     { name: 'Puma', logo: '/images/puma_logo.jpg' },
   ];
 
-  // use ONLY the detailed versions with colorImages
   const sampleProducts = [
     { id: 1, name: 'Air Max Plus', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 170.00, updated: 'today', description: 'Iconic running shoe featuring Nike\'s revolutionary "Tuned Air" technology with visible Air units in heel and forefoot. Inspired by Florida\'s coastal sunsets with distinctive TPU fingers design. Provides enhanced stability, responsive cushioning and impact absorption with breathable mesh upper.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Gray'], rating: 4.5, reviews: 324, image: '/images/nikeairmaxplus_black.webp', colorImages: { 'Black': '/images/nikeairmaxplus_black.webp', 'White': '/images/nikeairmax_white.webp', 'Gray': '/images/nikeairmax_grey.webp' } },
     { id: 2, name: 'Ultraboost 5', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 180.00, updated: 'today', description: 'Revolutionary running shoe with 9mm more LIGHT BOOST foam offering 2% more forefoot energy return than previous models. Features adaptive Primeknit upper with enhanced breathability and Continental rubber outsole. 30% lighter than original Boost with highest energy return yet.', sizes: ['5','6','7','8','9','10','11'], colors: ['Black','White','Beige'], rating: 4.8, reviews: 567, image: '/images/ultraboost_white.webp', colorImages: { 'Black': '/images/ultraboost_black.webp', 'White': '/images/ultraboost_white.webp', 'Beige': '/images/ultraboost_beige.webp' } },
@@ -413,7 +395,7 @@ export default function FreshFootwearApp() {
     { id: 7, name: 'Court Vision Low', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 80.00, updated: '3 days ago', description: 'Court-style sneaker bringing \'80s basketball fast break style to today\'s culture. Features synthetic and real leather upper that softens with wear, perforations for breathability and classic rubber cupsole. Basketball-inspired design with Air Force 1 sole and refined Dunk-like profile for everyday casual wear.', sizes: ['7','8','9','10','11','12'], colors: ['White','Black'], rating: 4.3, reviews: 221, image: '/images/courtvision_white.webp', colorImages: { 'White': '/images/courtvision_white.webp', 'Black': '/images/courtvision_black.avif' } },
     { id: 8, name: 'Superstar II', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Men', price: 100.00, updated: '3 days ago', description: 'Iconic basketball-inspired sneaker with signature rubber shell toe and classic leather upper. Features the legendary Three Stripes design, cushioned insole and durable rubber cupsole. A timeless streetwear staple that blends sports heritage with modern style.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White'], rating: 4.7, reviews: 634, image: '/images/superstar_black.webp', colorImages: { 'Black': '/images/superstar_black.webp', 'White': '/images/superstar_white.avif' } },
     { id: 9, name: '574 Core', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Children', price: 99.95, updated: '4 days ago', description: 'Heritage sneaker built as versatile hybrid road/trail design on wider last. Features ENCAP midsole cushioning combining soft foam with durable polyurethane rim for all-day support, lightweight EVA foam cushioning. Upper made of 50% recycled content. Reliable, rugged and durable for active lifestyles.', sizes: ['1','2','3','4','5','6'], colors: ['White','Black','Blue'], rating: 4.5, reviews: 445, image: '/images/574core_white.jpg', colorImages: { 'White': '/images/574core_white.jpg', 'Black': '/images/574core_black.webp', 'Blue': '/images/574core_blue.webp' } },
-    { id: 10, name: 'Pegasus 40', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 130.00, updated: 'today', description: 'Great all-rounder trainer suitable for everything from Park Run to speed sessions to marathons. Features React foam midsole with front and heel Zoom Air bags for responsive cushioning, redesigned engineered mesh upper with improved mid-foot band support, and 10mm drop.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Neon'], rating: 4.9, reviews: 892, image: '/images/pegasus_black.webp', colorImages: { 'Black': '/images/pegasus_black.webp', 'White': '/images/pegasus_white.avif', 'Neon': '/images/pegasus_neon.avif' } },
+    { id: 10, name: 'Pegasus 40', brand: 'Nike', brandLogo: '/images/nike_logo.jpg', category: 'Men', price: 130.00, updated: 'today', description: 'Great all-rounder trainer suitable for everything from Park Run to speed sessions to marathons. Features React foam midsole with front and heel Zoom Air bags for responsive cushioning, redesigned engineered mesh upper with improved mid-foot band support, and 10mm drop. Trusty, reliable training partner weighing just 9.4 oz.', sizes: ['7','8','9','10','11','12'], colors: ['Black','White','Neon'], rating: 4.9, reviews: 892, image: '/images/pegasus_black.webp', colorImages: { 'Black': '/images/pegasus_black.webp', 'White': '/images/pegasus_white.avif', 'Neon': '/images/pegasus_neon.avif' } },
     { id: 11, name: 'Solarboost 5', brand: 'Adidas', brandLogo: '/images/adidas_logo.jpg', category: 'Women', price: 130.00, updated: 'yesterday', description: 'Workhorse running shoe with support, cushioning and energy for building consistency or upping mileage.', sizes: ['5','6','7','8','9','10','11'], colors: ['White','Red'], rating: 4.6, reviews: 512, image: '/images/solarboost_white.jpg', colorImages: { 'White': '/images/solarboost_white.jpg', 'Red': '/images/solarboost_red.avif' } },
     { id: 12, name: '990v6', brand: 'New Balance', brandLogo: '/images/newbalance_logo.jpg', category: 'Men', price: 200.00, updated: '2 days ago', description: 'Premium Made in USA lifestyle sneaker featuring FuelCell foam technology for superior cushioning and rebound.', sizes: ['7','8','9','10','11','12','13'], colors: ['Black','Blue'], rating: 4.8, reviews: 723, image: '/images/990v6_black.webp', colorImages: { 'Black': '/images/990v6_black.webp', 'Blue': '/images/990v6_blue.webp' } },
     { id: 13, name: 'Velocity Nitro 3', brand: 'Puma', brandLogo: '/images/puma_logo.jpg', category: 'Children', price: 135.00, updated: '3 days ago', description: 'Lightweight daily trainer with supercritical NITROFOAM providing explosive energy return.', sizes: ['1','2','3','4','5','6'], colors: ['Black','Blue','Pink'], rating: 4.4, reviews: 298, image: '/images/velocitynitro_black.avif', colorImages: { 'Black': '/images/velocitynitro_black.avif', 'Blue': '/images/velocitynitro_blue.avif', 'Pink': '/images/velocitynitro_pink.avif' } },
@@ -491,20 +473,10 @@ export default function FreshFootwearApp() {
   };
 
   const handleClearCart = () => setCartItems([]);
-  const handleCheckout = () => { setCartOpen(false); setCheckoutOpen(true); };
 
-  const confirmCheckout = () => {
-    const grouped = cartItems.reduce((acc, item) => {
-      const key = item.variantKey ?? `${item.id}::${item.selectedSize ?? 'nosize'}::${item.selectedColor ?? 'nocolor'}`;
-      if (!acc[key]) acc[key] = { ...item, qty: 0, variantKey: key };
-      acc[key].qty++;
-      return acc;
-    }, {});
-    const items = Object.values(grouped);
-    const total = items.reduce((s, it) => s + (it.price || 0) * (it.qty || 1), 0);
-    alert(`Order placed: ${items.reduce((s, it) => s + it.qty, 0)} item(s) — Total: $${total.toFixed(2)}`);
-    setCartItems([]);
-    setCheckoutOpen(false);
+  const handleCheckout = () => {
+    setCartOpen(false);
+    setCurrentPage('checkout');
   };
 
   const CartDropdown = () => {
@@ -566,55 +538,6 @@ export default function FreshFootwearApp() {
           <div style={{ fontWeight: 700, marginRight: 12 }}>Total: ${total.toFixed(2)}</div>
           <button onClick={() => setCartOpen(false)} style={{ padding: '10px', border: '1px solid #000000ff', background: '#000000ff', color: '#fff', cursor: 'pointer' }}>Continue</button>
           <button onClick={handleCheckout} style={{ padding: '10px', border: 'none', background: '#000', color: '#fff', cursor: 'pointer' }}>Checkout</button>
-        </div>
-      </div>
-    );
-  };
-
-  const CheckoutModal = () => {
-    const grouped = cartItems.reduce((acc, item) => {
-      const key = item.variantKey ?? `${item.id}::${item.selectedSize ?? 'nosize'}::${item.selectedColor ?? 'nocolor'}`;
-      if (!acc[key]) acc[key] = { ...item, qty: 0, variantKey: key };
-      acc[key].qty++;
-      return acc;
-    }, {});
-    const items = Object.values(grouped);
-    const total = items.reduce((s, it) => s + it.price * it.qty, 0);
-
-    return (
-      <div style={styles.modalOverlay} role="dialog" aria-label="Checkout">
-        <div style={styles.modalContent}>
-          <h3>Checkout</h3>
-          {items.length === 0 ? (
-            <div>Your cart is empty</div>
-          ) : (
-            <div>
-              {items.map((it) => (
-                <div key={it.variantKey} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <div>
-                    <div style={{ fontWeight: 600, color: '#000' }}>{it.name}</div>
-                    <div style={{ fontSize: 12, color: '#666' }}>
-                      {it.selectedSize ? `Size: ${it.selectedSize}` : ''}
-                      {it.selectedSize && it.selectedColor ? ' • ' : ''}
-                      {it.selectedColor ? `Color: ${it.selectedColor}` : ''}
-                    </div>
-                    <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>${it.price.toFixed(2)} × {it.qty}</div>
-                  </div>
-                  <div style={{ fontWeight: 600 }}>${(it.price * it.qty).toFixed(2)}</div>
-                </div>
-              ))}
-              <hr />
-              <div style={{ marginTop: 8, padding: '8px 0', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#333' }}>Total:</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#000', marginLeft: 12 }}>${total.toFixed(2)}</div>
-              </div>
-            </div>
-          )}
-
-          <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
-            <button onClick={() => setCheckoutOpen(false)} style={{ flex: 1, padding: '10px', border: '1px solid #000000ff', background: '#000000ff', color: '#fff', cursor: 'pointer' }}>Cancel</button>
-            <button onClick={confirmCheckout} style={{ flex: 1, padding: '10px', border: 'none', background: '#000', color: '#fff', cursor: 'pointer' }}>Confirm Order</button>
-          </div>
         </div>
       </div>
     );
@@ -931,8 +854,14 @@ export default function FreshFootwearApp() {
       {currentPage === 'home' && renderHomePage()}
       {currentPage === 'browse' && renderBrowsePage()}
       {currentPage === 'details' && renderDetailsPage()}
+      {currentPage === 'checkout' && (
+        <CheckoutPage
+          cartItems={cartItems}
+          setCartItems={setCartItems}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
       {cartOpen && <CartDropdown />}
-      {checkoutOpen && <CheckoutModal />}
     </div>
   );
 }
