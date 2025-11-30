@@ -30,7 +30,7 @@ CREATE TABLE `orders` (
   `address_id` int NOT NULL,
   `payment_id` int DEFAULT NULL,
   `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  `order_status` enum('Pending','Paid','Shipped','Delivered','Cancelled') DEFAULT 'Pending',
+  `order_status` enum('Pending','Paid','Processing','Shipped','Delivered','Cancelled','Returned') DEFAULT 'Pending',
   `total_amount` decimal(10,2) NOT NULL,
   PRIMARY KEY (`order_id`),
   KEY `user_id` (`user_id`),
@@ -40,7 +40,7 @@ CREATE TABLE `orders` (
   CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`payment_id`) REFERENCES `paymentmethods` (`payment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `orders_chk_1` CHECK ((`total_amount` >= 0))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,6 +49,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (8,1,1,NULL,'2025-11-23 11:02:33','Pending',559.97),(9,2,2,NULL,'2025-11-23 11:02:48','Paid',349.98),(10,2,2,NULL,'2025-11-23 11:43:54','Shipped',559.97);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +62,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-01 14:16:56
+-- Dump completed on 2025-11-30 15:16:19

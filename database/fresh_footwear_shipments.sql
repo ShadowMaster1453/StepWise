@@ -28,6 +28,7 @@ CREATE TABLE `shipments` (
   `shipment_id` int NOT NULL AUTO_INCREMENT,
   `order_id` int NOT NULL,
   `address_id` int NOT NULL,
+  `admin_id` int DEFAULT NULL,
   `carrier` varchar(100) DEFAULT NULL,
   `tracking_number` varchar(100) DEFAULT NULL,
   `ship_date` datetime DEFAULT NULL,
@@ -39,7 +40,7 @@ CREATE TABLE `shipments` (
   KEY `address_id` (`address_id`),
   CONSTRAINT `shipments_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `shipments_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,6 +49,7 @@ CREATE TABLE `shipments` (
 
 LOCK TABLES `shipments` WRITE;
 /*!40000 ALTER TABLE `shipments` DISABLE KEYS */;
+INSERT INTO `shipments` VALUES (1,8,1,1,NULL,NULL,'2025-11-23 11:24:40',NULL,NULL,'Pending'),(2,10,1,1,'UPS','2025113001','2025-11-30 12:51:45',NULL,NULL,'Pending'),(3,9,1,1,NULL,NULL,'2025-11-30 13:03:49',NULL,NULL,'Pending');
 /*!40000 ALTER TABLE `shipments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +62,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-01 14:16:57
+-- Dump completed on 2025-11-30 15:16:19

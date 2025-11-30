@@ -31,14 +31,14 @@ CREATE TABLE `products` (
   `category` enum('Men','Women','Kids') DEFAULT NULL,
   `size` varchar(10) NOT NULL,
   `color` varchar(50) DEFAULT NULL,
-  `price` decimal(10,2) NOT NULL,
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `stock` int DEFAULT '0',
   `product_description` text,
   `image_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   CONSTRAINT `products_chk_1` CHECK ((`price` >= 0)),
   CONSTRAINT `products_chk_2` CHECK ((`stock` >= 0))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,6 +47,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (3,'Nike Air Zoom','Nike','Men','8.5','Black',129.99,2,NULL,NULL),(6,'Jordan 6 Retro Tinker','Jordan','Women','6.5','White & Gray',219.99,1,NULL,NULL),(9,'Nike Air Zoom','Nike','Men','10','Black',129.99,1,NULL,NULL),(10,'Nike Air Max 97','Nike','Men','7','Green',120.99,2,'Good shoes',NULL),(11,'Adidas Runfalcon 5','Adidas','Women','5.5','White',90.00,3,NULL,NULL),(12,'Adidas Samba OG','Adidas','Kids','5','Black',100.00,1,NULL,NULL),(13,'Nike Air Max 97','Nike','Kids','4','White',119.99,6,NULL,NULL);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-01 14:16:56
+-- Dump completed on 2025-11-30 15:16:19

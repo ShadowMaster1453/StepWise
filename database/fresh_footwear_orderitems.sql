@@ -29,7 +29,7 @@ CREATE TABLE `orderitems` (
   `order_id` int NOT NULL,
   `product_id` int NOT NULL,
   `quantity` int NOT NULL,
-  `price` decimal(10,2) NOT NULL,
+  `unit_price` decimal(10,2) NOT NULL,
   `size` varchar(10) DEFAULT NULL,
   `color` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`order_item_id`),
@@ -37,9 +37,8 @@ CREATE TABLE `orderitems` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `orderitems_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `orderitems_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `orderitems_chk_1` CHECK ((`quantity` > 0)),
-  CONSTRAINT `orderitems_chk_2` CHECK ((`price` >= 0))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `orderitems_chk_1` CHECK ((`quantity` > 0))
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,6 +47,7 @@ CREATE TABLE `orderitems` (
 
 LOCK TABLES `orderitems` WRITE;
 /*!40000 ALTER TABLE `orderitems` DISABLE KEYS */;
+INSERT INTO `orderitems` VALUES (1,8,6,2,219.99,NULL,NULL),(2,9,6,1,219.99,NULL,NULL),(3,9,3,1,129.99,NULL,NULL),(4,10,6,2,219.99,NULL,NULL),(5,10,13,1,119.99,NULL,NULL),(6,8,13,1,119.99,NULL,NULL);
 /*!40000 ALTER TABLE `orderitems` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-01 14:16:56
+-- Dump completed on 2025-11-30 15:16:19
