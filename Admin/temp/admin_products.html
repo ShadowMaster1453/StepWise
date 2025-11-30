@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Management - Fresh Footwear</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <span class="navbar-brand">Fresh Footwear Admin</span>
+      <div class="d-flex">
+        <span class="text-white me-3">Welcome, {{ admin_name }}</span>
+        <a href="/admin/dashboard" class="btn btn-outline-light btn-sm me-2">Dashboard</a>
+        <a href="/admin/logout" class="btn btn-outline-light btn-sm">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h3 class="mb-4">Product Management</h3>
+
+    <!-- Search bar -->
+    <form method="GET" action="/admin/products" class="row mb-4">
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="search" placeholder="Search by name or brand" value="{{ search_query }}">
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-secondary">Search</button>
+        {% if search_query %}
+        <a href="/admin/products" class="btn btn-outline-secondary ms-2">Clear</a>
+        {% endif %}
+      </div>
+    </form>
+
+    <!-- Add product form -->
+    <form class="row g-3 mb-5" method="POST" action="/admin/products/add">
+      <div class="col-md-3">
+        <input type="text" class="form-control" name="product_name" placeholder="Product Name" required>
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="brand" placeholder="Brand">
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" name="category">
+          <option value="">Category</option>
+          <option value="Men">Men</option>
+          <option value="Women">Women</option>
+          <option value="Kids">Kids</option>
+        </select>
+      </div>
+      <div class="col-md-1">
+        <input type="text" class="form-control" name="size" placeholder="Size">
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="color" placeholder="Color">
+      </div>
+      <div class="col-md-1">
+        <input type="number" step="0.01" class="form-control" name="price" placeholder="Price" required>
+      </div>
+      <div class="col-md-1">
+        <input type="number" class="form-control" name="stock" placeholder="Stock" required>
+      </div>
+      <div class="col-md-12 text-end">
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </div>
+    </form>
+
+    <!-- Product Table -->
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Brand</th>
+          <th>Category</th>
+          <th>Size</th>
+          <th>Color</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>{{ p.product_id }}</td>
+          <td>{{ p.product_name }}</td>
+          <td>{{ p.brand }}</td>
+          <td>{{ p.category }}</td>
+          <td>{{ p.size }}</td>
+          <td>{{ p.color }}</td>
+          <td>${{ '%.2f'|format(p.price) }}</td>
+          <td>{{ p.stock }}</td>
+          <td>
+            <a href="/admin/products/edit/{{ p.product_id }}" class="btn btn-sm btn-warning me-2">Edit</a>
+            <a href="/admin/products/delete/{{ p.product_id }}" class="btn btn-sm btn-danger"
+              onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="9" class="text-center text-muted">No products found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav aria-label="Product pagination">
+      <ul class="pagination justify-content-center">
+        {% if page > 1 %}
+        <li class="page-item">
+          <a class="page-link" href="/admin/products?page={{ page - 1 }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for i in range(1, total_pages + 1) %}
+        <li class="page-item {% if i == page %}active{% endif %}">
+          <a class="page-link" href="/admin/products?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ i }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page < total_pages %}
+        <li class="page-item">
+          <a class="page-link" href="/admin/products?page={{ page + 1 }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
