@@ -1,57 +1,59 @@
 # StepWise -- Fresh Footwear E-Commerce Platform
 
-StepWise is a modern full-stack web application designed to serve as an
+StepWise is a locally hosted full-stack web application designed as an
 online shoe store. Users can browse products, view details, and interact
-with the early foundations of a full shopping experience. This project
-is developed for **CP317A -- Software Engineering**, Group XVIII.
+with the early foundations of a shopping experience. This project is
+developed for **CP317A -- Software Engineering**, Group XVIII.
 
 ## 🛠️ Tech Stack
 
 -   **Next.js 14** (App Router)
 -   **React**
 -   **TailwindCSS**
--   **Prisma ORM**
--   **NeonDB (PostgreSQL)**
+-   **Prisma ORM** (local SQLite database)
 -   **NextAuth.js**
+-   **Python (Flask)** for the admin management tool
 -   **TypeScript**
 
 ## 📌 Project Overview
 
-This repository contains the initial implementation of the Fresh
-Footwear platform. The goal is to build a clean, scalable, cloud-hosted
-e-commerce system that will grow over multiple sprints.
+This repository contains the first working prototype of the Fresh
+Footwear platform. The project focuses on building maintainable, modular
+architecture that evolves across sprints.
 
 ### Features implemented so far:
 
 -   Home page layout
--   Product catalogue page structure
--   Product detail page structure
--   Auth setup with NextAuth
--   Initial Prisma schema + database connection
--   Basic admin dashboard layout
--   Core UI components (navigation, product cards, layout)
+-   Product catalogue page (static structure)
+-   Product detail page
+-   Local database (SQLite)
+-   Authentication setup with NextAuth
+-   Admin management tool (Flask app)
+-   UI component foundations (nav bar, product cards, footer)
 
 ## 📂 Folder Structure
 
     StepWise/
     │── app/
     │   ├── api/            # API routes (auth, users, products)
-    │   ├── admin/          # Admin dashboard sections
+    │   ├── admin/          # Admin dashboard structure
     │   ├── product/        # Product detail pages
     │   ├── components/     # Reusable UI components
     │   └── page.tsx        # Home page
     │
     │── prisma/
-    │   └── schema.prisma   # Database schema (Neon/Postgres)
+    │   └── schema.prisma   # Local SQLite database schema
+    │
+    │── admin_app.py        # Flask-based admin backend
     │
     │── public/
     │   └── images/         # Assets
     │
-    │── utils/              # DB connection + auth helpers
+    │── utils/              # DB + auth helper files
     │── package.json
     │── README.md
 
-## ⚙️ Getting Started
+## ⚙️ Getting Started (Main Web App)
 
 ### 1. Clone the repo
 
@@ -68,32 +70,54 @@ npm install
 
 ### 3. Create a `.env` file
 
-    DATABASE_URL="your-neon-postgres-url"
     NEXTAUTH_SECRET="your-secret"
     NEXTAUTH_URL="http://localhost:3000"
+    DATABASE_URL="file:./dev.db"
 
-### 4. Push database schema
+### 4. Push the database schema
 
 ``` bash
 npx prisma generate
 npx prisma db push
 ```
 
-### 5. Run the dev server
+### 5. Run the development server
 
 ``` bash
 npm run dev
 ```
 
-Open http://localhost:3000
+Visit http://localhost:3000
 
-## 🔒 Environment Variables
+# 🛡️ Running the Admin Dashboard (Python Flask App)
+
+The project includes a separate admin backend interface used for
+managing data locally.
+
+### 1. Run the admin Flask app
+
+``` bash
+python admin_app.py
+```
+
+### 2. Visit the admin dashboard
+
+Open the URL printed in the terminal, typically:
+
+    http://127.0.0.1:5000
+
+### 3. Log in using:
+
+-   Username: **admin**
+-   Password: **123456**
+
+## 🔒 Environment Variables (Local Only)
 
   Variable          Purpose
-  ----------------- ------------------------------
-  DATABASE_URL      Connection string for NeonDB
-  NEXTAUTH_SECRET   Encryption key for sessions
-  NEXTAUTH_URL      Auth callback URL
+  ----------------- ----------------------------
+  DATABASE_URL      Local SQLite database file
+  NEXTAUTH_SECRET   Session encryption
+  NEXTAUTH_URL      Local URL for NextAuth
 
 ## 👥 Team XVIII
 
@@ -108,14 +132,13 @@ Open http://localhost:3000
 
 ## 📍 Sprint 01 Scope
 
-The primary objective for Sprint 01 was to establish the core project
-infrastructure: - Base Next.js routing - UI foundations - Initial
-database + Prisma schema - Authentication setup - Admin dashboard
-scaffolding
+Established the core foundation of the application: - Base routing -
+Authentication - Local database setup - Admin dashboard (Flask) -
+Initial UI structure
 
 ## 📈 Roadmap
 
--   Sprint 02: Cart + checkout structure
--   Sprint 03: Stripe integration + order history
--   Sprint 04: Admin CRUD + reporting
--   Sprint 05: Deployment + final polish
+-   Sprint 02: Product filtering, cart logic
+-   Sprint 03: Checkout flow + improved admin tools
+-   Sprint 04: CRUD operations, statistics dashboard
+-   Sprint 05: Final polish & presentation
