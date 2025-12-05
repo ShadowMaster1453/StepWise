@@ -217,9 +217,15 @@ MySQL credentials stay inside `admin/db.py`.
   Member               Role
   -------------------- ----------------------
   **Nadeem Almalki**   Product Owner
+  
   Daniel Cao           Full Stack Developer
+  
   Hani Imran           Full Stack Developer
+  
   Jimmy Lin            Cloud Developer
+  
   Jake Lloyd           Front-End Developer
+  
   Evan Morris          Cloud Developer
+  
 
